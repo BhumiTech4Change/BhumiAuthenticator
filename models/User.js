@@ -8,8 +8,8 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   email:{ type:String, require: true, unique: true },
   password:{ type:String, required: true },
-  mobile: { type: String, required: true },
-  pin: { type: String, required: true },
+  mobile: { type: String, required: false },
+  pin: { type: String, required: false },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }
 });

@@ -8,11 +8,9 @@ const bcrypt = require('bcrypt-nodejs');
 const passport = require('passport');
 require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
 const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const sgTransport = require('nodemailer-sendgrid-transport');
 const config = require('../config/database');
 const Feedback = require('../models/Feedback');
 
@@ -37,7 +35,7 @@ router.post('/signin/', function(req, res, next) {
       user.comparePassword(req.body.password, function(err, isMatch){
         if (isMatch && !err){
           const token = jwt.sign(user.toObject(), config.secret);
-          res.json({success:true, token: token, msg:"Successfully logged in!"});
+          res.json({ success:true, token: token, msg: "Successfully logged in!" });
         }else{
           res.status(401).send({success:false, msg:'Authentication failed. Wrong password'});
         }
@@ -51,23 +49,24 @@ router.post('/signin/', function(req, res, next) {
 */
 router.post('/signup/',function(req,res,next){
   if (!req.body.email || !req.body.password){
-    res.json({success:false, msg:'Please fill up stuff'});
+    res.json({ success:false, msg:'Please fill up stuff' });
   }else{
-    User.findOne({email:req.body.email},function(err,usr){
+    User.findOne({ email: req.body.email },function(err,usr){
       if (err){
-        res.json({success:false, msg:"Server Hangup!"});
+        res.json({success: false, msg: "Server Hangup!"});
       }
       else if (usr != null){
-        res.json({success:false, msg:"User already exists, try logging in!"});
-      }else{
+        res.json({ success:false, msg:"User already exists, try logging in!" });
+      } else {
         const newUser = new User({
           email: req.body.email,
           password:req.body.password,
-          mobile: req.body.phone,
+          mobile: req.body.mobile,
           pin: req.body.pin
         });
-        newUser.save(function(err,success){
+        newUser.save(function(err, success){
           if(err){
+            console.log(err);
             res.json({success: false, msg:'Database Hangup!'});
           }
           res.json({success:true, msg:'Successfully created new user, login now!'});
