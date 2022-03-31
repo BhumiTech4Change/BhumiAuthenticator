@@ -1,2 +1,2 @@
 # BhumiRTEAuthenticator
-Authenticator app built with gRPC &amp; mongo
+Authenticator app built with node &amp; mongo
